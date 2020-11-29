@@ -1,0 +1,54 @@
+FROM node:12
+
+RUN apt-get update && \
+    apt-get install -y wget git python3-minimal && \
+    #libatomic1 && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+
+ENV POSTGRESQLHOST=localhost
+ENV POSTGRESQLPORT=5432
+ENV POSTGRESQLUSER=ml4kdbuser
+ENV POSTGRESQLPASSWORD=ml4kdbpwd
+ENV POSTGRESQLDATABASE=mlforkidsdb
+
+ENV PORT=3000
+ENV HOST=localhost
+
+
+EXPOSE 3000
+
+COPY ./ /tmp/ml4k/
+
+WORKDIR /tmp/ml4k
+
+
+# If we use a non-node container, we can install the required version as per this:
+#https://nodejs.org/dist/latest-v12.x/
+# x86_64, armv7l, arm64
+#ARG PROCESSOR_FAMILY=x86_64
+#ARG NODE_LATEST=latest-v12.x
+#ARG NODE_VERSION=v12.20.0
+#RUN wget https://nodejs.org/dist/${NODE_LATEST}/node-${NODE_VERSION}-linux-${PROCESSOR_FAMILY}.tar.gz && \
+#    tar xvzf node-${NODE_VERSION}-linux-${PROCESSOR_FAMILY}.tar.gz  &&  \
+#    mkdir -p /opt/node && cp -r node-${NODE_VERSION}-linux-${PROCESSOR_FAMILY}/* /opt/node && \
+#    ln -s /opt/node/bin/node /usr/bin/node && ln -s /opt/node/lib/node /usr/lib/node && \
+#    ln -s /opt/node/bin/npm /usr/bin/npm && ln -s /opt/node/bin/node-waf /usr/bin/node-waf && \
+#    rm node-${NODE_VERSION}-linux-${PROCESSOR_FAMILY}.tar.gz # && rm -r node-${NODE_VERSION}-linux-${PROCESSOR_FAMILY}
+
+# Node libvips pakckage downloads of the form:
+#https://github.com/lovell/sharp-libvips/releases/download/v8.10.0/libvips-8.10.0-linux-x64.tar.br
+# Desired architectures
+#-linux-arm64v8 -linux-armv7.tar.br linux-x64.tar.gz
+ARG SHARP_FAMILY=x64
+# Do the following help?!
+#ENV npm_config_sharp_binary_host=https://github.com/lovell/sharp-libvips/releases/download/
+#ENV npm_config_sharp_libvips_binary_host=https://github.com/lovell/sharp-libvips/releases/download/v8.10.0/libvips-8.10.0-${SHARP_FAMILY}.tar.br
+# Broken for arm64 - doesn't pick up the correct install for sharp-libvips
+# We can grab a file as eg:
+#RUN wget https://github.com/lovell/sharp-libvips/releases/download/v8.10.0/libvips-8.10.0-linux-${SHARP_FAMILY}.tar.br
+#Then maybe try to do something with the node insataller aorund ${SHARP_FAMILY}?
+RUN npm install
+RUN npm run build_notest
+
+CMD ["npm", "start"]
