@@ -1,4 +1,4 @@
-name: buildx-vce-base
+name: buildx-vce-ml4kids
 # Via: https://www.padok.fr/en/blog/multi-architectures-docker-iot
 on:
   release:
@@ -35,7 +35,7 @@ jobs:
       - name: Run Buildx
         run: |
           docker buildx build \
-            --platform linux/amd64,linux/arm/v7,linux/arm64 \
+            --platform linux/amd64,linux/arm/v7 \
             -t ouvocl/ml4kids:${GITHUB_SHA::7} \
             ./vce-notebook
       - name: Login to DockerHub
@@ -45,12 +45,12 @@ jobs:
       - name: Run Buildx
         run: |
           docker buildx build \
-            --platform linux/amd64,linux/arm/v7,linux/arm64 \
+            --platform linux/amd64,linux/arm/v7  \
             -t ouvocl/ml4kids:${GITHUB_SHA::7} \
             ./vce-notebook \
             --push
           docker buildx build \
-            --platform linux/amd64,linux/arm/v7,linux/arm64 \
+            --platform linux/amd64,linux/arm/v7  \
             -t ouvocl/ml4kids:latest \
             . \
             --push

@@ -2,6 +2,7 @@ FROM node:12-buster-slim
 
 RUN apt-get update && \
     apt-get install -y wget git build-essential python3-minimal && \
+    apt-get install -y libvips-tools && \
     #libatomic1 && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
