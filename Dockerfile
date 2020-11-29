@@ -1,6 +1,6 @@
 FROM node:12-buster-slim
 
-RUN apt-get update && apt-get upgrade -y && apt-get install -y git && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get upgrade -y && apt-get install -y git python3-minimal && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 
 #ENV POSTGRESQLHOST=localhost
