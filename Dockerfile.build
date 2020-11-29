@@ -1,4 +1,4 @@
-FROM node:12
+FROM node:12-buster-slim
 
 RUN apt-get update && \
     apt-get install -y wget git python3-minimal && \
@@ -36,7 +36,7 @@ WORKDIR /tmp/ml4k
 #    ln -s /opt/node/bin/npm /usr/bin/npm && ln -s /opt/node/bin/node-waf /usr/bin/node-waf && \
 #    rm node-${NODE_VERSION}-linux-${PROCESSOR_FAMILY}.tar.gz # && rm -r node-${NODE_VERSION}-linux-${PROCESSOR_FAMILY}
 
-# Node libvips pakckage downloads of the form:
+# Node libvips package downloads of the form:
 #https://github.com/lovell/sharp-libvips/releases/download/v8.10.0/libvips-8.10.0-linux-x64.tar.br
 # Desired architectures
 #-linux-arm64v8 -linux-armv7.tar.br linux-x64.tar.gz
@@ -47,7 +47,7 @@ ARG SHARP_FAMILY=x64
 # Broken for arm64 - doesn't pick up the correct install for sharp-libvips
 # We can grab a file as eg:
 #RUN wget https://github.com/lovell/sharp-libvips/releases/download/v8.10.0/libvips-8.10.0-linux-${SHARP_FAMILY}.tar.br
-#Then maybe try to do something with the node insataller aorund ${SHARP_FAMILY}?
+#Then maybe try to do something with the node installer around ${SHARP_FAMILY}?
 RUN npm install
 RUN npm run build_notest
 
